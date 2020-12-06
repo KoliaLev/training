@@ -1,0 +1,75 @@
+* {
+  font-family: 'Modak', cursive;
+}
+
+header {
+  display: flex;
+  box-sizing: border-box;
+  flex: 20%;
+}
+
+header > div {
+  transition: all 0.5s ease-in;
+  background-position: center;
+  background-size: cover;
+  flex: 1;
+  height: 400px;
+}
+
+.column1 {
+  background-image: url('https://www.befunky.com/images/wp/wp-2014-08-milky-way-1023340_1280.jpg?auto=webp&format=jpg&width=1184');
+}
+
+.column1:hover {
+  flex: 6;
+}
+
+.column2 {
+  background-image: url('https://www.deccanherald.com/sites/dh/files/styles/article_detail/public/articleimages/2020/09/30/space-istock-895035-1601412603.jpg?itok=8JDfauw8');
+}
+
+.column2:hover {
+  flex: 6;
+}
+.column3 {
+  background-image: url('https://cdn-7.nikon-cdn.com/Images/Learn-Explore/Photography-Techniques/2019/CA-Chris-Ogonek-Picture-Controls/Media/Chris-Ogonek-Picture-Controls-Vivid.jpg');
+}
+
+.column3:hover {
+  flex: 6;
+}
+.column4 {
+  background-image: url('https://blog.photofeeler.com/wp-content/uploads/2017/09/tinder-photo-size-tinder-picture-size-tinder-aspect-ratio-image-dimensions-crop.jpg');
+}
+
+.column4:hover {
+  flex: 6;
+}
+
+.column5 {
+  background-image: url('https://image.shutterstock.com/image-photo/iconic-picture-bavaria-maria-gern-260nw-1549897160.jpg');
+}
+
+.column5:hover {
+  flex: 6;
+}
+
+.link-bar {
+}
+
+.link-main {
+  display: block;
+  margin-top: 30px;
+  color: white;
+  background-color: green;
+  padding: 20px;
+  text-transform: uppercase;
+  text-decoration: none;
+  width: fit-content;
+  transition: all 0.5s ease-in-out;
+  border-radius: 10px;
+}
+
+.link-main:hover {
+  background-color: rgb(174, 177, 1);
+}
