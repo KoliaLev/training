@@ -1,3 +1,5 @@
+// рисуем фрактал
+
 var canvas2 = document.getElementById("canvas-2");
 var ctx2 = canvas2.getContext("2d");
 
@@ -22,18 +24,18 @@ var a1 = 30;
 var a2 = 50;
 var a = circle2(a1, a2, 3);
 
-var b1 = 300;
-var b2 = 400;
+var b1 = 1200;
+var b2 = 100;
 var b = circle2(b1, b2, 3);
 
-var c1 = 420;
-var c2 = 70;
+var c1 = 720;
+var c2 = 1400;
 var c = circle2(c1, c2, 3);
 
 x1 = 50;
 x2 = 300;
 var xRamdom = circle2(x1, x2, 4);
-var x = circle2((x1 + a1) / 2, (x2 + a2) / 2);
+
 
 ctx2.fillStyle = "black";
 
