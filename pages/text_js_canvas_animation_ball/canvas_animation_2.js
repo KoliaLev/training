@@ -56,7 +56,7 @@ const ball = [];
 const balls = function (maxBall) {
   for (var i = 0; i < maxBall; i++) {
     ball[i] = new Ball(i * 10, i * 10);
-    ball[i].draw();
+    // ball[i].draw();
     // console.log(ball[i]);
   }
 };
