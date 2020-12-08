@@ -22,6 +22,7 @@ const Ball = function () {
     this.spead = 5;
     this.xSpead = this.spead;
     this.ySpead = 0;
+    this.radius = 10;
 };
 
 Ball.prototype.move = function () {
@@ -42,10 +43,10 @@ Ball.prototype.move = function () {
 };
 
 Ball.prototype.draw = function () {
-    circle(this.x, this.y, 10, true);
+    circle(this.x, this.y, this.radius, true);    
 };
 
-Ball.prototype.setDirection = function (direction, speads) {
+Ball.prototype.setDirection = function (direction) {
     if (direction === "up") {
         this.xSpead = 0;
         this.ySpead = -this.spead;
@@ -61,13 +62,37 @@ Ball.prototype.setDirection = function (direction, speads) {
     } else if (direction === "stop") {
         this.xSpead = 0;
         this.ySpead = 0;
-    } else if (direction === undefined && speads) {
+    } 
+};
+
+
+Ball.prototype.setSpead = function (speads) {
+    if (speads === "downSpead") {
+        if (this.spead > 1) {
+            this.spead = --this.spead;
+            $("P").text("Cкорость " + this.spead);
+        } else this.spead = 1; // скорость не может быть меньше 1
+            
+    } else if (speads === "upSpead") {
+        this.spead = ++this.spead;
+        $("P").text("Cкорость " + this.spead);
+    } else if (speads) {
         // console.log("direction " + direction);
         // console.log(speads);
         $("P").text("Cкорость " + speads);
         this.spead = speads;
     }
 };
+
+Ball.prototype.setSizeBall = function (size) {
+    if (size === "sizeUp") {
+        this.radius = ++this.radius;
+    } else if (size === "sizeDown" && this.radius > 1) {
+        this.radius = --this.radius;
+    }
+};
+
+
 
 const ball = new Ball();
 
@@ -89,13 +114,23 @@ const keySpeads = {
     55: 7,
     56: 8,
     57: 9,
+    88: "upSpead", // x
+    90: "downSpead", // z
+};
+
+const keySize = {
+    67: "sizeDown", // c
+    86: "sizeUp",  // v
 };
 
 $("body").keydown(function (event) {
     const direction = keyActions[event.keyCode];
     const speads = keySpeads[event.keyCode];
+    const size = keySize[event.keyCode]
     console.log(speads);
-    ball.setDirection(direction, speads);
+    ball.setDirection(direction);
+    ball.setSpead(speads);
+    ball.setSizeBall(size);
 });
 
 setInterval(function () {
