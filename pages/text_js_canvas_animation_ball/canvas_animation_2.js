@@ -54,7 +54,7 @@ const ball = [];
 // var ball3 = new Ball(250, 250);
 
 const balls = function (maxBall) {
-  for (var i = 0; i < maxBall; i++) {
+  for (let i = 0; i < maxBall; i++) {
     ball[i] = new Ball(i * 10, i * 10);
     // ball[i].draw();
     // console.log(ball[i]);
