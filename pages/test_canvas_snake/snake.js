@@ -20,68 +20,64 @@ const drawBorder = function () {
     ctx.fillRect(width - col, 0, col, height);
 };
 
-
 // -------------
 // конструктор блока
-var Block = function (x,y) {
-    this.x = x * col;
-    this.y = y * row;
-}
+var Block = function (col, row) {
+    this.x = col;
+    this.y = row;
+};
 
 // рисуем блок
 Block.prototype.draw = function () {
     ctx.fillStyle = "blue";
-    ctx.fillRect(this.x, this.y, row, col);
-}
+    ctx.fillRect(this.x * blockSize, this.y * blockSize, blockSize, blockSize);
+};
 
 const circle = function (x, y, radius) {
     ctx.fillStyle = "green";
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2, false);
     ctx.fill();
-    
 };
 
 // рисуем круг блока
-Block.prototype.drawCircle = function () {   
-    circle(this.x + blockSize / 2, this.y + blockSize / 2, blockSize / 2);
+Block.prototype.drawCircle = function () {
+    circle(this.x * blockSize + blockSize / 2, this.y * blockSize + blockSize / 2, blockSize / 2);
 };
 
 Block.prototype.equal = function (otherBlock) {
-    return thix.x === otherBlock.x && this.y === otherBlock.y;
-}
-// 
+    return this.x === otherBlock.x && this.y === otherBlock.y;
+};
+//
 // --------------
-
 
 // --------------
 //  конструктор яблока
 var Apple = function () {
-    this.position = new Block(10, 10);
-}
+    this.position = new Block(2, 5);
+};
 
 // рисуем блоко вызывая для тукущей позиции метод драв блока
 Apple.prototype.draw = function () {
     this.position.drawCircle();
-}
+};
 
 // метод для сдвига яблока в случайную позицию
 Apple.prototype.move = function () {
     const randomX = Math.floor(Math.random() * (col - 2) + 1);
     const randomY = Math.floor(Math.random() * (row - 2) + 1);
-    this.position = new Block(randomX, randomY);  
-
+    this.position = new Block(randomX, randomY);
 };
-// 
+//
 // --------------
 
 // --------------
 // конструктор змейка - масив блоков
 var Snake = function () {
-    this.s = [new Block(2, 3), new Block(3, 3), new Block(4, 3)];
+    this.s = [new Block(4, 3), new Block(3, 3), new Block(2, 3)];
     this.direction = "right";
     this.nextDirection = "right";
-} ;
+};
 
 //  рисуем змейку. прорисовуем блоки масива
 Snake.prototype.draw = function () {
@@ -92,36 +88,52 @@ Snake.prototype.draw = function () {
 
 // движение змейки, добавляет елемент в начало масива, соответственно к направлению
 Snake.prototype.move = function () {
-    
-    const head = this.s[0];
+    let head = this.s[0];
     let newHead;
 
     this.direction = this.nextDirection;
 
-    if (direction === "right") {
+    if (this.direction === "right") {
         newHead = new Block(head.x + 1, head.y);
-    } else if (direction === "left") {
+        console.log("head.x = " + head.x);
+        console.log("head.y = " + head.y);
+        console.log("newHead= " + newHead);
+    } else if (this.direction === "left") {
         newHead = new Block(head.x - 1, head.y);
-    } else if (direction === "up") {
+    } else if (this.direction === "up") {
         newHead = new Block(head.x, head.y - 1);
-    } else if (direction === "down") {
+    } else if (this.direction === "down") {
         newHead = new Block(head.x, head.y + 1);
     }
 
     this.s.unshift(newHead); // добавляется новая голова змеи в начало масива змейки
-
-    if (newHead.equal(apple.position)) {   // проверяется не совпадает ли новая голова змеи с яблоком
-        score++;
+    console.log(this.s);
+    if (newHead.equal(apple.position)) {
+        // проверяется не совпадает ли новая голова змеи с яблоком
+        // score++;
         apple.move();
     } else {
         this.s.pop(); // иначе удаляется роследний элемент змейки
     }
 };
-// 
+
+Snake.prototype.setDirection = function (newDirection) {
+    if (this.direction === "right" && newDirection === "left") {
+        return;
+    } else if (this.direction === "left" && newDirection === "right") {
+        return;
+    } else if (this.direction === "up" && newDirection === "down") {
+        return;
+    } else if (this.direction === "down" && newDirection === "up") {
+        return;
+    }
+
+    this.nextDirection = newDirection;
+};
+//
 // -------------------
-
+let apple = new Apple();
 let snake = new Snake();
-
 
 const keyActions = {
     32: "stop",
@@ -133,14 +145,13 @@ const keyActions = {
 
 //  запускает функцию чтения клавиатуры
 $("body").keydown(function (event) {
-    const direction = keyActions[event.keyCode];
-    console.log(direction);
-    snake.setDirection(direction);
+    const newDirection = keyActions[event.keyCode];
+    console.log(newDirection);
+    snake.setDirection(newDirection);
 });
 
-sn = new Snake;
+sn = new Snake();
 sn.draw();
-
 
 const intervalID = setInterval(function () {
     ctx.clearRect(0, 0, width, height);
@@ -149,8 +160,7 @@ const intervalID = setInterval(function () {
     snake.move();
     apple.draw();
     drawBorder();
-},100)
-
+}, 200);
 
 ////////////////////////////////////////////////
 // // рамка
