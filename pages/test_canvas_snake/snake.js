@@ -6,7 +6,7 @@ const ctx = canvas.getContext("2d");
 const width = canvas.width;
 const height = canvas.height;
 
-const blockSize = 20;
+const blockSize = 10;
 const row = width / blockSize;
 const col = height / blockSize;
 
@@ -14,10 +14,28 @@ const col = height / blockSize;
 const drawBorder = function () {
     ctx.lineWidth = col;
     ctx.fillStyle = "grey";
-    ctx.fillRect(0, 0, width, row);
-    ctx.fillRect(0, height - row, width, row);
-    ctx.fillRect(0, 0, col, height);
-    ctx.fillRect(width - col, 0, col, height);
+    ctx.fillRect(0, 0, width, blockSize);
+    ctx.fillRect(0, height - blockSize, width, blockSize);
+    ctx.fillRect(0, 0, blockSize, height);
+    ctx.fillRect(width - blockSize, 0, blockSize, height);
+};
+
+//  отрисовка счета
+const drawScore = function () {
+    ctx.textBaseline = "top";
+    ctx.font = "20px Arial";
+    ctx.fillStyle = "black";
+    ctx.fillText("Счет: " + score, blockSize, blockSize);
+};
+
+// конец игры
+var gameOver = function () {
+    clearInterval(intervalID);
+    ctx.font = "56px Courier";
+    ctx.fillStyle = "Black";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("Это фиаско!", width / 2, height / 2);
 };
 
 // -------------
@@ -107,11 +125,11 @@ Snake.prototype.move = function () {
         newHead = new Block(head.x, head.y - 1);
     } else if (this.direction === "down") {
         newHead = new Block(head.x, head.y + 1);
-    } 
+    }
 
-     if (snake.getCollision(newHead)) {
-         console.log("Это фиаско!!!");
-         clearInterval(intervalID);
+    if (snake.getCollision(newHead)) {
+        console.log("Это фиаско!!!");
+        gameOver();
     }
 
     this.s.unshift(newHead); // добавляется новая голова змеи в начало масива змейки
@@ -119,14 +137,14 @@ Snake.prototype.move = function () {
 
     if (newHead.equal(apple.position)) {
         // проверяется не совпадает ли новая голова змеи с яблоком
-        // score++;
+        score++;
         apple.move();
     } else {
         this.s.pop(); // иначе удаляется последний элемент змейки
     }
 };
 
-// принимается направление 
+// принимается направление
 Snake.prototype.setDirection = function (newDirection) {
     if (this.direction === "right" && newDirection === "left") {
         return;
@@ -136,40 +154,44 @@ Snake.prototype.setDirection = function (newDirection) {
         return;
     } else if (this.direction === "down" && newDirection === "up") {
         return;
-    } else if (newDirection === "left" || newDirection === "right" || newDirection === "down" || newDirection === "up") {
+    } else if (
+        newDirection === "left" ||
+        newDirection === "right" ||
+        newDirection === "down" ||
+        newDirection === "up"
+    ) {
         this.nextDirection = newDirection;
     }
-    
 };
 
 // проверка на столкновение
 // если столкновение произошло возвращает true
 Snake.prototype.getCollision = function (head) {
-    let rightCollision = (head.x === col - 1);
+    let rightCollision = head.x === col - 1;
     // console.log(rightCollision);
-    let leftCollision = (head.x === 0);
+    let leftCollision = head.x === 0;
     // console.log(leftCollision);
-    let upCollision = (head.y === 0);
+    let upCollision = head.y === 0;
     // console.log(upCollision);
-    let downCollision = (head.y === row - 1);
+    let downCollision = head.y === row - 1;
     // console.log(downCollision);
 
     let wallCollision = rightCollision || leftCollision || upCollision || downCollision;
     for (let i = 0; i < this.s.length; i++) {
         if (head.equal(this.s[i])) {
-            var selfCollision = true;           
+            var selfCollision = true;
         }
-
     }
     // console.log(selfCollision);
     return wallCollision || selfCollision;
-    
-}
+};
 //
 // -------------------
 
 let apple = new Apple();
+apple.move();
 let snake = new Snake();
+var score = 0;
 
 const keyActions = {
     32: "stop",
@@ -186,16 +208,14 @@ $("body").keydown(function (event) {
     snake.setDirection(newDirection);
 });
 
-
-
 const intervalID = setInterval(function () {
     ctx.clearRect(0, 0, width, height);
-    // getScore();
+    drawScore();
     snake.draw();
     snake.move();
     apple.draw();
     drawBorder();
-}, 400);
+}, 200);
 
 ////////////////////////////////////////////////
 // // рамка
